@@ -28,13 +28,18 @@ Spacer.license = "MIT - https://opensource.org/licenses/MIT"
 --- Spacer.settingsKey
 --- Constant
 --- Key used for persisting space names between Hammerspoon launches via hs.settings.
-Spacer.settingsKey = "SpacerSpaceName"
+Spacer.settingsKey = "SpacerSpaceNames"
 
 --- Spacer.logger
 --- Variable
 --- Logger object used within the Spoon. Can be accessed to set the default log 
 --- level for the messages coming from the Spoon.
 Spacer.logger = nil
+
+--- Spacer.logLevel
+--- Variable
+--- Spacer specific log level override, see hs.logger.setLogLevel for options.
+Spacer.logLevel = nil
 
 --- Spacer.menuBar
 --- Variable
@@ -56,7 +61,6 @@ Spacer.spaceNames = nil
 --- Table holding an ordered list of space IDs, which is then used to resolve
 --- actual space names for IDs from Spacer.spaceNames.
 Spacer.orderedSpaces = nil
-
 
 -- Set the menu text of the Spacer menu bar item.
 function Spacer:_setMenuText()
@@ -113,6 +117,8 @@ end
 -- will resolve that named space and send you to it.
 
 function Spacer:_writeSpaceNames()
+    self.logger.v("Writing space names to hs.settings")
+
     -- Create a new empty ordered list of space names.
     settingsSpaceNames = {}
 
@@ -141,13 +147,18 @@ end
 -- If a space is created, look whatever name that position has persisted, if any
 -- or default it to Desktop N
 function Spacer:_loadSpaceNames()
+    self.logger.vf("Loading space names from hs.settings key \"%s\"",
+                   self.settingsKey)
+
     -- Load the persisted space names from the previous session if any.
     settingsSpaceNames = hs.settings.get(self.settingsKey)
     if settingsSpaceNames == nil then
         -- Default to empty table.
+        self.logger.v("No saved space names, initializing empty table")
         settingsSpaceNames = {}
     end
 
+    self.logger.v("Loading space names for main screen")
     -- Get the main screen on the device
     screen = hs.screen.mainScreen()
     -- Get all spaces on this screen
@@ -164,20 +175,24 @@ function Spacer:_loadSpaceNames()
             spaceName = string.format("Desktop %d", i)
         end
 
+        self.logger
+            .vf("Setting name for \"Desktop %d\" to \"%s\"", i, spaceName)
         -- Map space ID to name
         self.spaceNames[spaceID] = spaceName
         -- Insert the space into the ordered table to record it positionally from
         -- left to right.
         table.insert(self.orderedSpaces, spaceID)
     end
+
+    self.logger.vf("Loaded existing space names: %s",
+                   hs.inspect(settingsSpaceNames))
+    return settingsSpaceNames
 end
 
 --- Spacer:init()
 --- Method
 --- Spoon initializer method for Spacer.
 function Spacer:init()
-    self.logger = hs.logger.new("Spacer")
-
     self.spaceNames = {}
     self.orderedSpaces = {}
 end
@@ -186,12 +201,21 @@ end
 --- Method
 --- Spoon start method for Spacer. Creates/starts menu bar item and space watcher.
 function Spacer:start()
+    -- Start logger, this has to be done in start because it relies on config.
+    self.logger = hs.logger.new("Spacer")
+
+    if self.logLevel ~= nil then self.logger.setLogLevel(self.logLevel) end
+
+    self.logger.v("Starting Spacer")
+
     self:_loadSpaceNames()
 
+    self.logger.v("Creating menubar item")
     self.menuBar = hs.menubar.new()
     self.menuBar:setMenu(self:_instanceCallback(self._menuHandler))
 
     -- Set space watcher to update menu bar text on space change.
+    self.logger.v("Creating and starting space watcher")
     self.spaceWatcher = hs.spaces.watcher.new(
                             self:_instanceCallback(self._setMenuText))
 
@@ -205,8 +229,10 @@ end
 --- Method
 --- Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.
 function Spacer:stop()
+    self.logger.v("Deleting menubar item")
     self.menuBar:delete()
 
+    self.logger.v("Stopping space watcher")
     self.spaceWatcher:stop()
 
     self._writeSpaceNames()
