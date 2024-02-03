@@ -3,60 +3,101 @@
 --- Name and switch Mission Control spaces in the menu bar
 ---
 --- Download: [https://github.com/adammillerio/Spacer.spoon/archive/refs/heads/main.zip](https://github.com/adammillerio/Spacer.spoon/archive/refs/heads/main.zip)
-local obj = {}
-obj.__index = obj
+---
+--- Example Usage (Using [SpoonInstall](https://zzamboni.org/post/using-spoons-in-hammerspoon/)):
+--- spoon.SpoonInstall:andUse(
+---   "Spacer",
+---   {
+---     start = true
+---   }
+--- )
+local Spacer = {}
+Spacer.__index = Spacer
 
--- Spacer.logger
--- Variable
---- Logger object used within the Spoon. Can be accessed to set the default log level for the messages coming from the Spoon.
-obj.logger = nil
+-- Metadata
+Spacer.name = "Spacer"
+Spacer.version = "0.1"
+Spacer.author = "Adam Miller <adam@adammiller.io>"
+Spacer.homepage = "https://github.com/adammillerio/Spacer.spoon"
+Spacer.license = "MIT - https://opensource.org/licenses/MIT"
 
-obj.menuBar = nil
+--- Spacer.logger
+--- Variable
+--- Logger object used within the Spoon. Can be accessed to set the default log 
+--- level for the messages coming from the Spoon.
+Spacer.logger = nil
 
-obj.spaceWatcher = nil
+--- Spacer.menuBar
+--- Variable
+--- hs.menubar representing the menu bar for Spacer.
+Spacer.menuBar = nil
 
-obj.spaceNames = nil
+--- Spacer.spaceWatcher
+--- Variable
+--- hs.spaces.watcher instance used for monitoring for space changes.
+Spacer.spaceWatcher = nil
 
-local function getSpaceName(spaceID)
-    spaceName = obj.spaceNames[spaceID]
+--- Spacer.spaceNames
+--- Variable
+--- Table with key-value mapping of Space ID to it's user set name.
+Spacer.spaceNames = nil
+
+-- Retrieve the user configured name for a Space or it's ID.
+function Spacer:_getSpaceName(spaceID)
+    spaceName = self.spaceNames[spaceID]
     if spaceName == nil then return tostring(spaceID) end
 
     return spaceName
 end
 
-local function setMenuText()
+-- Set the menu text of the Spacer menu bar item.
+function Spacer:_setMenuText()
     focusedSpace = hs.spaces.focusedSpace()
-    spaceName = getSpaceName(focusedSpace)
+    spaceName = self:_getSpaceName(focusedSpace)
 
-    obj.menuBar:setTitle(spaceName)
+    self.menuBar:setTitle(spaceName)
 end
 
-local function spaceChanged(spaceNum) setMenuText() end
-
-local function menuItemClicked(spaceID, modifiers, menuItem)
+-- Handler for user clicking one of the Spacer menu bar menu items.
+-- Inputs are the space ID, a table of modifiers and their state upon selection,
+-- and the menuItem table.
+function Spacer:_menuItemClicked(spaceID, modifiers, menuItem)
     if modifiers['alt'] then
-        _, inputSpaceName = hs.dialog.textPrompt('Input Space Name',
-                                                 'Enter New Space Name')
-        obj.spaceNames[spaceID] = inputSpaceName
+        -- Alt held, enter user space rename mode.
+        _, inputSpaceName = hs.dialog.textPrompt("Input Space Name",
+                                                 "Enter New Space Name")
+        self.spaceNames[spaceID] = inputSpaceName
     else
+        -- Go to the selected space.
         hs.spaces.gotoSpace(spaceID)
     end
 end
 
-local function menuHandler()
+-- Utility method for having instance specific callbacks.
+-- Inputs are the callback fn and any arguments to be applied after the instance
+-- reference.
+function Spacer:_instanceCallback(callback, ...)
+    return hs.fnutils.partial(callback, self, ...)
+end
+
+-- Handler for creating the Spacer menu bar menu.
+function Spacer:_menuHandler()
     menuItems = {}
 
     screen = hs.screen.mainScreen()
     spaces = hs.spaces.allSpaces()
+
+    -- Get the spaces for this screen.
     screenSpaces = spaces[screen:getUUID()]
 
     for i, spaceID in ipairs(screenSpaces) do
         menuItem = {}
 
-        menuItem['fn'] = function(modifiers, menuItem)
-            menuItemClicked(spaceID, modifiers, menuItem)
-        end
-        menuItem['title'] = getSpaceName(spaceID)
+        -- Set callback for space being clicked.
+        menuItem["fn"] = self:_instanceCallback(self._menuItemClicked, spaceID)
+
+        -- Set menu item to either the user name for the space or the ID.
+        menuItem["title"] = self:_getSpaceName(spaceID)
 
         table.insert(menuItems, menuItem)
     end
@@ -64,21 +105,39 @@ local function menuHandler()
     return menuItems
 end
 
-function obj:init()
-    obj.logger = hs.logger.new('Spacer')
+--- Spacer:init()
+--- Method
+--- Spoon initializer method for Spacer.
+function Spacer:init()
+    self.logger = hs.logger.new("Spacer")
 
-    obj.menuBar = hs.menubar.new()
-    obj.menuBar:setMenu(menuHandler)
-
-    obj.spaceWatcher = hs.spaces.watcher.new(spaceChanged)
-
-    obj.spaceNames = {}
-
-    setMenuText()
+    self.spaceNames = {}
 end
 
-function obj:start() obj.spaceWatcher:start() end
+--- Spacer:start()
+--- Method
+--- Spoon start method for Spacer. Creates/starts menu bar item and space watcher.
+function Spacer:start()
+    self.menuBar = hs.menubar.new()
+    self.menuBar:setMenu(self:_instanceCallback(self._menuHandler))
 
-function obj:stop() obj.spaceWatcher:stop() end
+    -- Set space watcher to update menu bar text on space change.
+    self.spaceWatcher = hs.spaces.watcher.new(
+                            self:_instanceCallback(self._setMenuText))
 
-return obj
+    self.spaceWatcher:start()
+
+    -- Perform an initial text set for the current space.
+    self:_setMenuText()
+end
+
+--- Spacer:stop()
+--- Method
+--- Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.
+function Spacer:stop()
+    self.menuBar:delete()
+
+    self.spaceWatcher:stop()
+end
+
+return Spacer

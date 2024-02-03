@@ -1,0 +1,320 @@
+[
+  {
+    "Constant" : [
+
+    ],
+    "submodules" : [
+
+    ],
+    "Function" : [
+
+    ],
+    "Variable" : [
+      {
+        "doc" : "Logger object used within the Spoon. Can be accessed to set the default log \nlevel for the messages coming from the Spoon.",
+        "desc" : "Logger object used within the Spoon. Can be accessed to set the default log",
+        "stripped_doc" : [
+          "Logger object used within the Spoon. Can be accessed to set the default log ",
+          "level for the messages coming from the Spoon."
+        ],
+        "name" : "logger",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer.logger",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "def" : "Spacer.logger",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "hs.menubar representing the menu bar for Spacer.",
+        "desc" : "hs.menubar representing the menu bar for Spacer.",
+        "stripped_doc" : [
+          "hs.menubar representing the menu bar for Spacer."
+        ],
+        "name" : "menuBar",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer.menuBar",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "def" : "Spacer.menuBar",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "hs.spaces.watcher instance used for monitoring for space changes.",
+        "desc" : "hs.spaces.watcher instance used for monitoring for space changes.",
+        "stripped_doc" : [
+          "hs.spaces.watcher instance used for monitoring for space changes."
+        ],
+        "name" : "spaceWatcher",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer.spaceWatcher",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "def" : "Spacer.spaceWatcher",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "Table with key-value mapping of Space ID to it's user set name.",
+        "desc" : "Table with key-value mapping of Space ID to it's user set name.",
+        "stripped_doc" : [
+          "Table with key-value mapping of Space ID to it's user set name."
+        ],
+        "name" : "spaceNames",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer.spaceNames",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "def" : "Spacer.spaceNames",
+        "parameters" : [
+
+        ]
+      }
+    ],
+    "stripped_doc" : [
+
+    ],
+    "desc" : "Name and switch Mission Control spaces in the menu bar",
+    "Deprecated" : [
+
+    ],
+    "type" : "Module",
+    "Constructor" : [
+
+    ],
+    "doc" : "Name and switch Mission Control spaces in the menu bar\n\nDownload: [https:\/\/github.com\/adammillerio\/Spacer.spoon\/archive\/refs\/heads\/main.zip](https:\/\/github.com\/adammillerio\/Spacer.spoon\/archive\/refs\/heads\/main.zip)\n\nExample Usage (Using [SpoonInstall](https:\/\/zzamboni.org\/post\/using-spoons-in-hammerspoon\/)):\nspoon.SpoonInstall:andUse(\n  \"Spacer\",\n  {\n    start = true\n  }\n)",
+    "items" : [
+      {
+        "doc" : "Logger object used within the Spoon. Can be accessed to set the default log \nlevel for the messages coming from the Spoon.",
+        "desc" : "Logger object used within the Spoon. Can be accessed to set the default log",
+        "stripped_doc" : [
+          "Logger object used within the Spoon. Can be accessed to set the default log ",
+          "level for the messages coming from the Spoon."
+        ],
+        "name" : "logger",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer.logger",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "def" : "Spacer.logger",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "hs.menubar representing the menu bar for Spacer.",
+        "desc" : "hs.menubar representing the menu bar for Spacer.",
+        "stripped_doc" : [
+          "hs.menubar representing the menu bar for Spacer."
+        ],
+        "name" : "menuBar",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer.menuBar",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "def" : "Spacer.menuBar",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "Table with key-value mapping of Space ID to it's user set name.",
+        "desc" : "Table with key-value mapping of Space ID to it's user set name.",
+        "stripped_doc" : [
+          "Table with key-value mapping of Space ID to it's user set name."
+        ],
+        "name" : "spaceNames",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer.spaceNames",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "def" : "Spacer.spaceNames",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "hs.spaces.watcher instance used for monitoring for space changes.",
+        "desc" : "hs.spaces.watcher instance used for monitoring for space changes.",
+        "stripped_doc" : [
+          "hs.spaces.watcher instance used for monitoring for space changes."
+        ],
+        "name" : "spaceWatcher",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer.spaceWatcher",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "def" : "Spacer.spaceWatcher",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "Spoon initializer method for Spacer.",
+        "desc" : "Spoon initializer method for Spacer.",
+        "stripped_doc" : [
+          "Spoon initializer method for Spacer."
+        ],
+        "name" : "init",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer:init()",
+        "type" : "Method",
+        "returns" : [
+
+        ],
+        "def" : "Spacer:init()",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
+        "desc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
+        "stripped_doc" : [
+          "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher."
+        ],
+        "name" : "start",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer:start()",
+        "type" : "Method",
+        "returns" : [
+
+        ],
+        "def" : "Spacer:start()",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
+        "desc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
+        "stripped_doc" : [
+          "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher."
+        ],
+        "name" : "stop",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer:stop()",
+        "type" : "Method",
+        "returns" : [
+
+        ],
+        "def" : "Spacer:stop()",
+        "parameters" : [
+
+        ]
+      }
+    ],
+    "Command" : [
+
+    ],
+    "Field" : [
+
+    ],
+    "Method" : [
+      {
+        "doc" : "Spoon initializer method for Spacer.",
+        "desc" : "Spoon initializer method for Spacer.",
+        "stripped_doc" : [
+          "Spoon initializer method for Spacer."
+        ],
+        "name" : "init",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer:init()",
+        "type" : "Method",
+        "returns" : [
+
+        ],
+        "def" : "Spacer:init()",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
+        "desc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
+        "stripped_doc" : [
+          "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher."
+        ],
+        "name" : "start",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer:start()",
+        "type" : "Method",
+        "returns" : [
+
+        ],
+        "def" : "Spacer:start()",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "doc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
+        "desc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
+        "stripped_doc" : [
+          "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher."
+        ],
+        "name" : "stop",
+        "notes" : [
+
+        ],
+        "signature" : "Spacer:stop()",
+        "type" : "Method",
+        "returns" : [
+
+        ],
+        "def" : "Spacer:stop()",
+        "parameters" : [
+
+        ]
+      }
+    ],
+    "name" : "Spacer"
+  }
+]
