@@ -20,6 +20,24 @@ At the core, Spacer is a Menu Bar item which displays the current Space's "Name"
 
 # Installation
 
+## Automated
+
+Spacer can be automatically installed from my [Spoon Repository](https://github.com/adammillerio/Spoons) via [SpoonInstall](https://www.hammerspoon.org/Spoons/SpoonInstall.html). See the repository README or the SpoonInstall docs for more information.
+
+Example `init.lua` configuration which configures `SpoonInstall` and uses it to install and start Spacer:
+
+```load
+hs.loadSpoon("SpoonInstall")
+
+spoon.SpoonInstall.repos.adammillerio = {
+    url = "https://github.com/adammillerio/Spoons",
+    desc = "adammillerio Personal Spoon repository",
+    branch = "main"
+}
+
+spoon.SpoonInstall:andUse("Spacer", {repo = "adammillerio", start = true})
+```
+
 ## Manual
 
 Download the latest release from [here.](https://github.com/adammillerio/Spoons/raw/main/Spoons/Spacer.spoon.zip)
