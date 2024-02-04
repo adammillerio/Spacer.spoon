@@ -310,6 +310,12 @@ end
 --- Spacer:init()
 --- Method
 --- Spoon initializer method for Spacer.
+---
+--- Parameters:
+---  * None
+---
+--- Returns:
+---  * None
 function Spacer:init()
     self.spaceNames = {}
     self.orderedSpaces = {}
@@ -318,6 +324,12 @@ end
 --- Spacer:start()
 --- Method
 --- Spoon start method for Spacer. Creates/starts menu bar item and space watcher.
+---
+--- Parameters:
+---  * None
+---
+--- Returns:
+---  * None
 function Spacer:start()
     -- Start logger, this has to be done in start because it relies on config.
     self.logger = hs.logger.new("Spacer")
@@ -347,6 +359,12 @@ end
 --- Spacer:stop()
 --- Method
 --- Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.
+---
+--- Parameters:
+---  * None
+---
+--- Returns:
+---  * None
 function Spacer:stop()
     self.logger.v("Deleting menubar item")
     self.menuBar:delete()
