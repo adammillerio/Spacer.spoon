@@ -93,6 +93,10 @@ end
 
 -- Handler for creating the Spacer menu bar menu.
 function Spacer:_menuHandler()
+    -- Reload space names, in case user has deleted/moved/created spaces since
+    -- last time clicking without actually changing spaces.
+    self:_reloadSpaceNames()
+
     -- Create table of menu items
     menuItems = {}
 
@@ -141,10 +145,107 @@ function Spacer:_writeSpaceNames()
     hs.settings.set(self.settingsKey, settingsSpaceNames)
 end
 
+function Spacer:_spaceChanged(spaceID)
+    -- Reload space names, in case user has created and switched to a new Desktop.
+    self:_reloadSpaceNames()
+
+    self:_setMenuText()
+end
+
+local function startswith(someStr, start) return someStr:sub(1, #start) == start end
+
 -- TODO
--- Update ordered position of a space after it is moved
--- If a space is deleted, remove it from the ordered list and space name list
--- If a space is created, look whatever name that position has persisted, if any
+-- Fix bug: Creating and moving it without entering it will cause it to temporarily
+-- overwrite space names after it.
+function Spacer:_reloadSpaceNames()
+    self.logger.v("Reloading space names")
+
+    changed = false
+
+    -- Get the main screen on the device
+    screen = hs.screen.mainScreen()
+    -- Get all spaces on this screen
+    spaces = hs.spaces.allSpaces()
+
+    -- Get the spaces for this screen.
+    screenSpaces = spaces[screen:getUUID()]
+
+    -- Step 1: Retrieve the number of spaces we had before making any changes
+    existingNumSpaces = #self.orderedSpaces
+    self.logger.vf("Existing number of spaces is %d", existingNumSpaces)
+
+    -- For every numerical index i and spaceID for spaces on this screen, from left
+    -- to right.
+    for i, spaceID in ipairs(screenSpaces) do
+        -- Step 2: Retrieve ID of the space that was in this this position last time
+        self.logger.vf("Getting existing space ID for Desktop %d", i)
+        existingSpaceID = self.orderedSpaces[i]
+        self.logger.vf("Existing space ID for Desktop %d: %s", i,
+                       existingSpaceID)
+        -- Step 3: If there was no ID in this position, then this is a newly
+        --  created space in the rightmost position, so initialize and append it
+        --  to the orderedSpaces and continue iteration.
+        if existingSpaceID == nil then
+            -- New space at end, append
+
+            -- Make function
+            spaceName = settingsSpaceNames[i]
+            if spaceName == nil then
+                -- Default space name to "None"
+                spaceName = "None"
+            end
+
+            self.logger.vf("Setting name for new \"Desktop %d\" to \"%s\"", i,
+                           spaceName)
+            -- Map space ID to name
+            self.spaceNames[spaceID] = spaceName
+            -- Insert the space into the ordered table to record it positionally from
+            -- left to right.
+            table.insert(self.orderedSpaces, spaceID)
+
+            changed = true
+            goto continue
+        end
+
+        -- Step 4: Look up the assigned name for this space ID
+        self.logger.vf("Getting existing space name for Desktop %d", i)
+        existingSpaceName = self.spaceNames[existingSpaceID]
+        self.logger.vf("Existing space name for Desktop %d: %s", i,
+                       existingSpaceName)
+
+        -- Step 5: Load the space name for the ID at this index during this run
+        spaceName = self.spaceNames[spaceID]
+        -- Step 6: If the resolved name now does not match the resolved name from
+        --  last run, then update the ordered left-to-right set of space IDs at
+        --  this index to now be the ID of the current space in this position.
+        if spaceName ~= existingSpaceName then
+            self.logger.vf(
+                "Space Name \"%s\" for Desktop %d differs from existing space name",
+                spaceName, i)
+
+            self.orderedSpaces[i] = spaceID
+            changed = true
+        end
+
+        ::continue::
+    end
+
+    -- Step 7: Check if the new number of spaces we have is less than the old
+    --  one, if it is, then remove all extra indices in the orderedSpaces table.
+    numSpaces = #screenSpaces
+    self.logger.vf("New number of spaces is %d", numSpaces)
+    if numSpaces < existingNumSpaces then
+        for i = numSpaces + 1, existingNumSpaces do
+            self.logger.vf("Removing deleted Desktop %d", i)
+            table.remove(self.orderedSpaces, i)
+        end
+
+        changed = true
+    end
+
+    if changed then self:_writeSpaceNames() end
+end
+
 -- or default it to Desktop N
 function Spacer:_loadSpaceNames()
     self.logger.vf("Loading space names from hs.settings key \"%s\"",
@@ -171,8 +272,8 @@ function Spacer:_loadSpaceNames()
     for i, spaceID in ipairs(screenSpaces) do
         spaceName = settingsSpaceNames[i]
         if spaceName == nil then
-            -- Default space name to "Desktop N"
-            spaceName = string.format("Desktop %d", i)
+            -- Default space name to "None"
+            spaceName = "None"
         end
 
         self.logger
@@ -214,10 +315,10 @@ function Spacer:start()
     self.menuBar = hs.menubar.new()
     self.menuBar:setMenu(self:_instanceCallback(self._menuHandler))
 
-    -- Set space watcher to update menu bar text on space change.
+    -- Set space watcher to call handler on space change.
     self.logger.v("Creating and starting space watcher")
     self.spaceWatcher = hs.spaces.watcher.new(
-                            self:_instanceCallback(self._setMenuText))
+                            self:_instanceCallback(self._spaceChanged))
 
     self.spaceWatcher:start()
 
