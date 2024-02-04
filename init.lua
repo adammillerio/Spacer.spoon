@@ -76,14 +76,15 @@ end
 -- Handler for user clicking one of the Spacer menu bar menu items.
 -- Inputs are the space ID, a table of modifiers and their state upon selection,
 -- and the menuItem table.
-function Spacer:_menuItemClicked(spaceID, modifiers, menuItem)
+function Spacer:_menuItemClicked(spacePos, spaceID, modifiers, menuItem)
     if modifiers['alt'] then
         -- Alt held, enter user space rename mode.
         _, inputSpaceName = hs.dialog.textPrompt("Input Space Name",
                                                  "Enter New Space Name")
-        self.spaceNames[spaceID] = inputSpaceName
+
+        -- Rename space and update menu text.
+        self:_renameSpace(spacePos, spaceID, inputSpaceName)
         self:_setMenuText()
-        self:_writeSpaceNames()
     else
         -- Go to the selected space.
         hs.spaces.gotoSpace(spaceID)
@@ -111,7 +112,8 @@ function Spacer:_menuHandler()
         menuItem = {}
 
         -- Set callback to handler for space being clicked.
-        menuItem["fn"] = self:_instanceCallback(self._menuItemClicked, spaceID)
+        menuItem["fn"] = self:_instanceCallback(self._menuItemClicked, i,
+                                                spaceID)
 
         -- Set menu item to either the user name for the space or the default.
         -- Look up the name for this space ID and set it on the menu item.
@@ -126,10 +128,19 @@ end
 -- Add some sort of space spotlight search, ie you can just type "Printer" and it
 -- will resolve that named space and send you to it.
 
+-- Rename a space, updating both the positional and by-ID value, and writing
+-- back to hs.settings.
+function Spacer:_renameSpace(spacePos, spaceID, name)
+    self.orderedSpaceNames[spacePos] = name
+    self.spaceNames[spaceID] = name
+
+    self:_writeSpaceNames()
+end
+
 -- Persist the current ordered set of space names back to hs.settings.
 function Spacer:_writeSpaceNames()
     self.logger.vf("Writing space names to hs.settings at %s: %s",
-                  self.settingsKey, hs.inspect(self.orderedSpaceNames))
+                   self.settingsKey, hs.inspect(self.orderedSpaceNames))
     hs.settings.set(self.settingsKey, self.orderedSpaceNames)
 end
 
@@ -290,8 +301,7 @@ function Spacer:_loadSpaceNames()
         self:_loadNewSpace(i, spaceID)
     end
 
-    self.logger.vf("Loaded space names: %s",
-                   hs.inspect(self.orderedSpaceNames))
+    self.logger.vf("Loaded space names: %s", hs.inspect(self.orderedSpaceNames))
 end
 
 --- Spacer:init()
