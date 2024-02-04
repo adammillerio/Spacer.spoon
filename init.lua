@@ -234,13 +234,15 @@ function Spacer:_reloadSpaceNames()
         spaceName = self.spaceNames[spaceID]
         -- Step 6: If the resolved name now does not match the resolved name from
         --  last run, then update the ordered left-to-right set of space IDs at
-        --  this index to now be the ID of the current space in this position.
+        --  this index to now be the ID of the current space in this position. Also
+        --  update the ordered name to the same thing.
         if spaceName ~= existingSpaceName then
             self.logger.vf(
                 "Space Name \"%s\" for Desktop %d differs from existing space name",
                 spaceName, i)
 
             self.orderedSpaces[i] = spaceID
+            self.orderedSpaceNames[i] = spaceName
             changed = true
         end
 
@@ -255,6 +257,7 @@ function Spacer:_reloadSpaceNames()
         for i = numSpaces + 1, existingNumSpaces do
             self.logger.vf("Removing deleted Desktop %d", i)
             table.remove(self.orderedSpaces, i)
+            table.remove(self.orderedSpaceNames, i)
         end
 
         changed = true
