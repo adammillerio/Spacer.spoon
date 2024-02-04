@@ -4,10 +4,10 @@
       {
         "doc" : "Key used for persisting space names between Hammerspoon launches via hs.settings.",
         "def" : "Spacer.settingsKey",
-        "name" : "settingsKey",
         "stripped_doc" : [
           "Key used for persisting space names between Hammerspoon launches via hs.settings."
         ],
+        "name" : "settingsKey",
         "notes" : [
 
         ],
@@ -32,11 +32,11 @@
       {
         "doc" : "Logger object used within the Spoon. Can be accessed to set the default log \nlevel for the messages coming from the Spoon.",
         "def" : "Spacer.logger",
-        "name" : "logger",
         "stripped_doc" : [
           "Logger object used within the Spoon. Can be accessed to set the default log ",
           "level for the messages coming from the Spoon."
         ],
+        "name" : "logger",
         "notes" : [
 
         ],
@@ -53,10 +53,10 @@
       {
         "doc" : "Spacer specific log level override, see hs.logger.setLogLevel for options.",
         "def" : "Spacer.logLevel",
-        "name" : "logLevel",
         "stripped_doc" : [
           "Spacer specific log level override, see hs.logger.setLogLevel for options."
         ],
+        "name" : "logLevel",
         "notes" : [
 
         ],
@@ -73,10 +73,10 @@
       {
         "doc" : "hs.menubar representing the menu bar for Spacer.",
         "def" : "Spacer.menuBar",
-        "name" : "menuBar",
         "stripped_doc" : [
           "hs.menubar representing the menu bar for Spacer."
         ],
+        "name" : "menuBar",
         "notes" : [
 
         ],
@@ -93,10 +93,10 @@
       {
         "doc" : "hs.spaces.watcher instance used for monitoring for space changes.",
         "def" : "Spacer.spaceWatcher",
-        "name" : "spaceWatcher",
         "stripped_doc" : [
           "hs.spaces.watcher instance used for monitoring for space changes."
         ],
+        "name" : "spaceWatcher",
         "notes" : [
 
         ],
@@ -113,10 +113,10 @@
       {
         "doc" : "Table with key-value mapping of Space ID to it's user set name.",
         "def" : "Spacer.spaceNames",
-        "name" : "spaceNames",
         "stripped_doc" : [
           "Table with key-value mapping of Space ID to it's user set name."
         ],
+        "name" : "spaceNames",
         "notes" : [
 
         ],
@@ -133,11 +133,11 @@
       {
         "doc" : "Table holding an ordered list of space IDs, which is then used to resolve\nactual space names for IDs from Spacer.spaceNames.",
         "def" : "Spacer.orderedSpaces",
-        "name" : "orderedSpaces",
         "stripped_doc" : [
           "Table holding an ordered list of space IDs, which is then used to resolve",
           "actual space names for IDs from Spacer.spaceNames."
         ],
+        "name" : "orderedSpaces",
         "notes" : [
 
         ],
@@ -154,11 +154,11 @@
       {
         "doc" : "Table with an ordered list of the space names, which is used when loading\nthe menubar, as well as persisted to and from hs.settings between loads.",
         "def" : "Spacer.orderedSpaceNames",
-        "name" : "orderedSpaceNames",
         "stripped_doc" : [
           "Table with an ordered list of the space names, which is used when loading",
           "the menubar, as well as persisted to and from hs.settings between loads."
         ],
+        "name" : "orderedSpaceNames",
         "notes" : [
 
         ],
@@ -176,10 +176,10 @@
     "stripped_doc" : [
 
     ],
-    "type" : "Module",
     "Deprecated" : [
 
     ],
+    "type" : "Module",
     "desc" : "Name and switch Mission Control spaces in the menu bar",
     "Constructor" : [
 
@@ -187,63 +187,69 @@
     "doc" : "Name and switch Mission Control spaces in the menu bar\n\nDownload: https:\/\/github.com\/adammillerio\/Spoons\/raw\/main\/Spoons\/Spacer.spoon.zip\n\nExample Usage (Using [SpoonInstall](https:\/\/zzamboni.org\/post\/using-spoons-in-hammerspoon\/)):\nspoon.SpoonInstall:andUse(\n  \"Spacer\",\n  {\n    start = true\n  }\n)\n\nSpace names can be changed from the menubar by holding Alt while selecting\nthe desired space to rename. These are persisted between launches via the\nhs.settings module.",
     "Method" : [
       {
-        "doc" : "Spoon initializer method for Spacer.",
+        "doc" : "Spoon initializer method for Spacer.\n\nParameters:\n * None\n\nReturns:\n * None",
         "def" : "Spacer:init()",
-        "name" : "init",
         "stripped_doc" : [
-          "Spoon initializer method for Spacer."
+          "Spoon initializer method for Spacer.",
+          ""
         ],
+        "name" : "init",
         "notes" : [
 
         ],
         "signature" : "Spacer:init()",
         "type" : "Method",
         "returns" : [
-
+          " * None"
         ],
         "desc" : "Spoon initializer method for Spacer.",
         "parameters" : [
-
+          " * None",
+          ""
         ]
       },
       {
-        "doc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
+        "doc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.\n\nParameters:\n * None\n\nReturns:\n * None",
         "def" : "Spacer:start()",
-        "name" : "start",
         "stripped_doc" : [
-          "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher."
+          "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
+          ""
         ],
+        "name" : "start",
         "notes" : [
 
         ],
         "signature" : "Spacer:start()",
         "type" : "Method",
         "returns" : [
-
+          " * None"
         ],
         "desc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
         "parameters" : [
-
+          " * None",
+          ""
         ]
       },
       {
-        "doc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
+        "doc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.\n\nParameters:\n * None\n\nReturns:\n * None",
         "def" : "Spacer:stop()",
-        "name" : "stop",
         "stripped_doc" : [
-          "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher."
+          "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
+          ""
         ],
+        "name" : "stop",
         "notes" : [
 
         ],
         "signature" : "Spacer:stop()",
         "type" : "Method",
         "returns" : [
-
+          " * None"
         ],
         "desc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
         "parameters" : [
-
+          " * None",
+          ""
         ]
       }
     ],
@@ -251,10 +257,10 @@
       {
         "doc" : "Key used for persisting space names between Hammerspoon launches via hs.settings.",
         "def" : "Spacer.settingsKey",
-        "name" : "settingsKey",
         "stripped_doc" : [
           "Key used for persisting space names between Hammerspoon launches via hs.settings."
         ],
+        "name" : "settingsKey",
         "notes" : [
 
         ],
@@ -271,10 +277,10 @@
       {
         "doc" : "Spacer specific log level override, see hs.logger.setLogLevel for options.",
         "def" : "Spacer.logLevel",
-        "name" : "logLevel",
         "stripped_doc" : [
           "Spacer specific log level override, see hs.logger.setLogLevel for options."
         ],
+        "name" : "logLevel",
         "notes" : [
 
         ],
@@ -291,11 +297,11 @@
       {
         "doc" : "Logger object used within the Spoon. Can be accessed to set the default log \nlevel for the messages coming from the Spoon.",
         "def" : "Spacer.logger",
-        "name" : "logger",
         "stripped_doc" : [
           "Logger object used within the Spoon. Can be accessed to set the default log ",
           "level for the messages coming from the Spoon."
         ],
+        "name" : "logger",
         "notes" : [
 
         ],
@@ -312,10 +318,10 @@
       {
         "doc" : "hs.menubar representing the menu bar for Spacer.",
         "def" : "Spacer.menuBar",
-        "name" : "menuBar",
         "stripped_doc" : [
           "hs.menubar representing the menu bar for Spacer."
         ],
+        "name" : "menuBar",
         "notes" : [
 
         ],
@@ -332,11 +338,11 @@
       {
         "doc" : "Table with an ordered list of the space names, which is used when loading\nthe menubar, as well as persisted to and from hs.settings between loads.",
         "def" : "Spacer.orderedSpaceNames",
-        "name" : "orderedSpaceNames",
         "stripped_doc" : [
           "Table with an ordered list of the space names, which is used when loading",
           "the menubar, as well as persisted to and from hs.settings between loads."
         ],
+        "name" : "orderedSpaceNames",
         "notes" : [
 
         ],
@@ -353,11 +359,11 @@
       {
         "doc" : "Table holding an ordered list of space IDs, which is then used to resolve\nactual space names for IDs from Spacer.spaceNames.",
         "def" : "Spacer.orderedSpaces",
-        "name" : "orderedSpaces",
         "stripped_doc" : [
           "Table holding an ordered list of space IDs, which is then used to resolve",
           "actual space names for IDs from Spacer.spaceNames."
         ],
+        "name" : "orderedSpaces",
         "notes" : [
 
         ],
@@ -374,10 +380,10 @@
       {
         "doc" : "Table with key-value mapping of Space ID to it's user set name.",
         "def" : "Spacer.spaceNames",
-        "name" : "spaceNames",
         "stripped_doc" : [
           "Table with key-value mapping of Space ID to it's user set name."
         ],
+        "name" : "spaceNames",
         "notes" : [
 
         ],
@@ -394,10 +400,10 @@
       {
         "doc" : "hs.spaces.watcher instance used for monitoring for space changes.",
         "def" : "Spacer.spaceWatcher",
-        "name" : "spaceWatcher",
         "stripped_doc" : [
           "hs.spaces.watcher instance used for monitoring for space changes."
         ],
+        "name" : "spaceWatcher",
         "notes" : [
 
         ],
@@ -412,63 +418,69 @@
         ]
       },
       {
-        "doc" : "Spoon initializer method for Spacer.",
+        "doc" : "Spoon initializer method for Spacer.\n\nParameters:\n * None\n\nReturns:\n * None",
         "def" : "Spacer:init()",
-        "name" : "init",
         "stripped_doc" : [
-          "Spoon initializer method for Spacer."
+          "Spoon initializer method for Spacer.",
+          ""
         ],
+        "name" : "init",
         "notes" : [
 
         ],
         "signature" : "Spacer:init()",
         "type" : "Method",
         "returns" : [
-
+          " * None"
         ],
         "desc" : "Spoon initializer method for Spacer.",
         "parameters" : [
-
+          " * None",
+          ""
         ]
       },
       {
-        "doc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
+        "doc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.\n\nParameters:\n * None\n\nReturns:\n * None",
         "def" : "Spacer:start()",
-        "name" : "start",
         "stripped_doc" : [
-          "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher."
+          "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
+          ""
         ],
+        "name" : "start",
         "notes" : [
 
         ],
         "signature" : "Spacer:start()",
         "type" : "Method",
         "returns" : [
-
+          " * None"
         ],
         "desc" : "Spoon start method for Spacer. Creates\/starts menu bar item and space watcher.",
         "parameters" : [
-
+          " * None",
+          ""
         ]
       },
       {
-        "doc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
+        "doc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.\n\nParameters:\n * None\n\nReturns:\n * None",
         "def" : "Spacer:stop()",
-        "name" : "stop",
         "stripped_doc" : [
-          "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher."
+          "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
+          ""
         ],
+        "name" : "stop",
         "notes" : [
 
         ],
         "signature" : "Spacer:stop()",
         "type" : "Method",
         "returns" : [
-
+          " * None"
         ],
         "desc" : "Spoon stop method for Spacer. Deletes menu bar item and stops space watcher.",
         "parameters" : [
-
+          " * None",
+          ""
         ]
       }
     ],
