@@ -95,8 +95,10 @@ function Spacer:_menuItemClicked(spacePos, spaceID, modifiers, menuItem)
         self:_renameSpace(spacePos, spaceID, inputSpaceName)
         self:_setMenuText()
     else
-        -- Go to the selected space.
-        hs.spaces.gotoSpace(spaceID)
+        if spaceID ~= self.focusedSpace then        
+            -- Go to the selected space if it is not the current one.
+            hs.spaces.gotoSpace(spaceID)
+        end
     end
 end
 
