@@ -17,11 +17,6 @@ Additionally, a hotkey can be bound (`space_chooser`) which will toggle a Spotli
 * When a space is moved in Mission Control, its position will be updated in the menu
 * Space names are persisted left-to-right in Hammerspoon settings between loads
 
-# Known Issues
-
-* Creating a Space in Mission Control and moving it to a position other than the end before entering it will cause it to overwrite the name of the Space at that position
-  * This can be avoided by just being sure to enter into a Space after creation before moving it
-
 # Installation
 
 ## Automated

@@ -14,7 +14,7 @@ Spacer.__index = Spacer
 
 -- Metadata
 Spacer.name = "Spacer"
-Spacer.version = "0.0.3"
+Spacer.version = "1.0.0"
 Spacer.author = "Adam Miller <adam@adammiller.io>"
 Spacer.homepage = "https://github.com/adammillerio/Spacer.spoon"
 Spacer.license = "MIT - https://opensource.org/licenses/MIT"
@@ -166,8 +166,9 @@ function Spacer:_spaceChanged(spaceID)
     self:_setMenuText()
 end
 
--- Load a new space into Spacer, resolving either it's previously persisted
--- ordinal name, or initializing it to "None".
+-- Load a new space into Spacer, resolving either it's current name if a new but
+-- moved space, outside of initial load, it's previous ordinal name at the current
+-- position if on initial load, or defaulting to "None".
 function Spacer:_loadNewSpace(spacePos, spaceID, initial)
     self.logger.vf("Creating new space at \"Desktop %d\" with ID %d", spacePos,
                    spaceID)
