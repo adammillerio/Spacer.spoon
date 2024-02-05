@@ -5,6 +5,10 @@ At the core, Spacer is a Menu Bar item which displays the current Space's "Name"
 
 ![Screenshot](docs/images/menu.png)
 
+Additionally, a hotkey can be bound (`space_chooser`) which will toggle a Spotlight-like completion panel for switching to Spaces by name:
+
+![Screenshot2](docs/images/chooser.png)
+
 # Features
 
 * Spaces are enumerated by their position in Mission Control from left-to-right
@@ -24,9 +28,9 @@ At the core, Spacer is a Menu Bar item which displays the current Space's "Name"
 
 Spacer can be automatically installed from my [Spoon Repository](https://github.com/adammillerio/Spoons) via [SpoonInstall](https://www.hammerspoon.org/Spoons/SpoonInstall.html). See the repository README or the SpoonInstall docs for more information.
 
-Example `init.lua` configuration which configures `SpoonInstall` and uses it to install and start Spacer:
+Example `init.lua` configuration which configures `SpoonInstall` and uses it to install and start Spacer, also binding the Chooser to the default hotkey (Ctrl+Space):
 
-```load
+```lua
 hs.loadSpoon("SpoonInstall")
 
 spoon.SpoonInstall.repos.adammillerio = {
@@ -35,7 +39,11 @@ spoon.SpoonInstall.repos.adammillerio = {
     branch = "main"
 }
 
-spoon.SpoonInstall:andUse("Spacer", {repo = "adammillerio", start = true})
+spoon.SpoonInstall:andUse("Spacer", {
+    repo = "adammillerio",
+    start = true,
+    hotkeys = "default"
+})
 ```
 
 ## Manual
@@ -49,3 +57,12 @@ Then load the Spoon in `~/.hammerspoon/init.lua`:
 ```lua
 hs.loadSpoon("Spacer")
 ```
+Optionally, the chooser can also be bound to a hotkey, such as Ctrl+Space:
+
+```lua
+spoon.Spacer:bindHotkeys({space_chooser = {{"ctrl"}, "space"}})
+```
+
+# Usage
+
+Refer to the [hosted documentation](https://adammiller.io/Spoons/Spacer.html) additional for information on usage.
