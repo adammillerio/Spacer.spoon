@@ -244,7 +244,7 @@
     "Constructor" : [
 
     ],
-    "doc" : "Name and switch Mission Control spaces in the menu bar\n\nDownload: https:\/\/github.com\/adammillerio\/Spoons\/raw\/main\/Spoons\/Spacer.spoon.zip\n\nExample Usage (Using [SpoonInstall](https:\/\/zzamboni.org\/post\/using-spoons-in-hammerspoon\/)):\nspoon.SpoonInstall:andUse(\n  \"Spacer\",\n  {\n    start = true\n  }\n)\n\nSpace names can be changed from the menubar by holding Alt while selecting\nthe desired space to rename. These are persisted between launches via the\nhs.settings module.",
+    "doc" : "Name and switch Mission Control spaces in the menu bar\n\nDownload: [Spacer.spoon.zip](https:\/\/github.com\/adammillerio\/Spoons\/raw\/main\/Spoons\/Spacer.spoon.zip)\n\nREADME: [README.md](https:\/\/github.com\/adammillerio\/Spacer.spoon\/blob\/main\/README.md)\n\nSpace names can be changed from the menubar by holding Alt while selecting\nthe desired space to rename. These are persisted between launches via the\nhs.settings module.",
     "Method" : [
       {
         "doc" : "Spoon initializer method for Spacer.\n\nParameters:\n * None\n\nReturns:\n * None",

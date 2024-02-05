@@ -2,15 +2,9 @@
 ---
 --- Name and switch Mission Control spaces in the menu bar
 ---
---- Download: https://github.com/adammillerio/Spoons/raw/main/Spoons/Spacer.spoon.zip
----
---- Example Usage (Using [SpoonInstall](https://zzamboni.org/post/using-spoons-in-hammerspoon/)):
---- spoon.SpoonInstall:andUse(
----   "Spacer",
----   {
----     start = true
----   }
---- )
+--- Download: [Spacer.spoon.zip](https://github.com/adammillerio/Spoons/raw/main/Spoons/Spacer.spoon.zip)
+--- 
+--- README: [README.md](https://github.com/adammillerio/Spacer.spoon/blob/main/README.md)
 ---
 --- Space names can be changed from the menubar by holding Alt while selecting
 --- the desired space to rename. These are persisted between launches via the
@@ -139,9 +133,6 @@ function Spacer:_menuHandler()
 
     return menuItems
 end
-
--- Add some sort of space spotlight search, ie you can just type "Printer" and it
--- will resolve that named space and send you to it.
 
 -- Rename a space, updating both the positional and by-ID value, and writing
 -- back to hs.settings.
