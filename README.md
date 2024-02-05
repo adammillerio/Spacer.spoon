@@ -7,7 +7,7 @@ At the core, Spacer is a Menu Bar item which displays the current Space's "Name"
 
 Additionally, a hotkey can be bound (`space_chooser`) which will toggle a Spotlight-like completion panel for switching to Spaces by name:
 
-[!Screenshot2](docs/images/chooser.png)
+![Screenshot2](docs/images/chooser.png)
 
 # Features
 
@@ -62,3 +62,7 @@ Optionally, the chooser can also be bound to a hotkey, such as Ctrl+Space:
 ```lua
 spoon.Spacer:bindHotkeys({space_chooser = {{"ctrl"}, "space"}})
 ```
+
+# Usage
+
+Refer to the [hosted documentation](https://adammiller.io/Spoons/Spacer.html) additional for information on usage.
