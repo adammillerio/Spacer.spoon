@@ -51,6 +51,7 @@ Then load the Spoon in `~/.hammerspoon/init.lua`:
 
 ```lua
 hs.loadSpoon("Spacer")
+hs.spoons.use("Spacer", {start = true})
 ```
 Optionally, the chooser can also be bound to a hotkey, such as Ctrl+Space:
 

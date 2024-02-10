@@ -14,7 +14,7 @@ Spacer.__index = Spacer
 
 -- Metadata
 Spacer.name = "Spacer"
-Spacer.version = "1.0.0"
+Spacer.version = "1.0.1"
 Spacer.author = "Adam Miller <adam@adammiller.io>"
 Spacer.homepage = "https://github.com/adammillerio/Spacer.spoon"
 Spacer.license = "MIT - https://opensource.org/licenses/MIT"
@@ -166,6 +166,34 @@ function Spacer:_spaceChanged(spaceID)
     self:_setMenuText()
 end
 
+-- Retrieve the "name" of a fullscreen space.
+-- This trudges through the internal data_managedDisplaySpaces structure to locate
+-- and set the name of a fullscreen space, which is the app name of the first
+-- "tile" in a tiled space.
+function Spacer:_getFullScreenSpaceName(spaceID)
+    spaceData = hs.spaces.data_managedDisplaySpaces()
+
+    screenUUID = hs.screen.mainScreen():getUUID()
+
+    for _, displaySpaces in ipairs(spaceData) do
+        -- Find spaces for this screen.
+        if displaySpaces["Display Identifier"] == screenUUID then
+            for _, space in ipairs(displaySpaces["Spaces"]) do
+                -- Find the space with this ID.
+                if space["ManagedSpaceID"] == spaceID then
+                    -- Retrieve and return tiled app name.
+                    return
+                        space["TileLayoutManager"]["TileSpaces"][1]["appName"] ..
+                            " (F)"
+                end
+            end
+        end
+    end
+
+    -- Could not find name.
+    return nil
+end
+
 -- Load a new space into Spacer, resolving either it's current name if a new but
 -- moved space, outside of initial load, it's previous ordinal name at the current
 -- position if on initial load, or defaulting to "None".
@@ -173,24 +201,23 @@ function Spacer:_loadNewSpace(spacePos, spaceID, initial)
     self.logger.vf("Creating new space at \"Desktop %d\" with ID %d", spacePos,
                    spaceID)
 
-    if initial then
-        -- See if there was a name for the space in this position last load.
-        spaceName = self.orderedSpaceNames[spacePos]
-        if spaceName == nil then
-            -- No previous name in position, default space name to "None" and insert
-            -- it into the table.
-            spaceName = "None"
-            self.orderedSpaceNames[spacePos] = spaceName
-        end
+    -- If this is a Fullscreen app space, find and format a name based on the app.
+    if hs.spaces.spaceType(spaceID) == "fullscreen" then
+        spaceName = self:_getFullScreenSpaceName(spaceID)
     else
-        -- See if there's already a name stored for this space and use if there is.
-        spaceName = self.spaceNames[spaceID]
-        if spaceName == nil then
-            -- No previous name in position, default space name to "None" and insert
-            -- it into the table.
-            spaceName = "None"
-            self.orderedSpaceNames[spacePos] = spaceName
+        if initial then
+            -- See if there was a name for the space in this position last load.
+            spaceName = self.orderedSpaceNames[spacePos]
+        else
+            -- See if there's already a name stored for this space and use if there is.
+            spaceName = self.spaceNames[spaceID]
         end
+    end
+
+    if spaceName == nil then
+        -- No existing name, default space name to "None" and inser it into the table.
+        spaceName = "None"
+        self.orderedSpaceNames[spacePos] = spaceName
     end
 
     self.logger.vf("Setting name for \"Desktop %d\" to \"%s\"", spacePos,
