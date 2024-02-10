@@ -29,7 +29,7 @@ Spacer.settingsKey = "SpacerSpaceNames"
 --- Default hotkey to use for the space chooser when "hotkeys" = 
 Spacer.defaultHotkeys = {
     space_chooser = {{"ctrl"}, "space"},
-    fullscreen_window_to_left = {{"cmd", "ctrl"}, "f"}
+    fullscreen_window_to_left = {{"cmd", "shift"}, "f"}
 }
 
 --- Spacer.tilingMenuSection
@@ -41,6 +41,12 @@ Spacer.tilingMenuSection = "Window"
 --- Variable
 --- Menu item for tiling window to the left. Set this according to your language.
 Spacer.tilingMenuItem = "Tile Window to Left of Screen"
+
+--- Spacer.exitFullScreenKeystroke
+--- Variable
+--- Keystroke representing shortcut to exit a full screen application. Defaults to
+--- Cmd+Ctrl+F which has worked for all applications so far.
+Spacer.exitFullScreenKeystroke = {modifiers = {"cmd", "ctrl"}, character = "f"}
 
 --- Spacer.logger
 --- Variable
@@ -438,23 +444,42 @@ function Spacer:_showSpaceChooser()
     end
 end
 
+-- All credit to
+-- https://apple.stackexchange.com/questions/259610/how-to-make-fullscreen-windows-appear-next-to-the-current-space-with-rearran
 function Spacer:fullscreenWindowToLeft()
-    self.delayedWindowClickTimer = hs.timer.delayed.new(1,
-                                                        self:_instanceCallback(
-                                                            self._clickOnLeftScreenSide))
-
     app = hs.application.frontmostApplication()
-
     if app == nil then
         self.logger.w("No frontmost application, can't fullscreen")
         return
+    end
+
+    window = app:focusedWindow()
+    if window == nil then
+        self.logger.w("Frontmost application has no windows, can't fullscreen")
+        return
+    end
+
+    if window:isFullScreen() then
+        self.logger
+            .v("Current window is already fullscreen, exiting fullscreen")
+        self:_exitFullScreen()
     end
 
     if not self:_trySelectingTilingMenuItem(app) then
         self:_tileToTheLeft(app)
     end
 
+    self.delayedWindowClickTimer = hs.timer.delayed.new(1,
+                                                        self:_instanceCallback(
+                                                            self._clickOnLeftScreenSide))
     self.delayedWindowClickTimer:start()
+end
+
+function Spacer:_exitFullScreen()
+    self.logger.vf("Pressing keystroke to exit fullscreen: %s",
+                   hs.inspect(self.exitFullScreenKeystroke))
+    hs.eventtap.keyStroke(self.exitFullScreenKeystroke.modifiers,
+                          self.exitFullScreenKeystroke.character)
 end
 
 function Spacer:_clickOnLeftScreenSide()
