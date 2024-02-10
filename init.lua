@@ -27,7 +27,20 @@ Spacer.settingsKey = "SpacerSpaceNames"
 --- Spacer.defaultHotkeys
 --- Variable
 --- Default hotkey to use for the space chooser when "hotkeys" = 
-Spacer.defaultHotkeys = {space_chooser = {{"ctrl"}, "space"}}
+Spacer.defaultHotkeys = {
+    space_chooser = {{"ctrl"}, "space"},
+    fullscreen_window_to_left = {{"cmd", "ctrl"}, "f"}
+}
+
+--- Spacer.tilingMenuSection
+--- Variable
+--- Menu "section" which has tiling options. Set this according to your language.
+Spacer.tilingMenuSection = "Window"
+
+--- Spacer.tilingMenuItem
+--- Variable
+--- Menu item for tiling window to the left. Set this according to your language.
+Spacer.tilingMenuItem = "Tile Window to Left of Screen"
 
 --- Spacer.logger
 --- Variable
@@ -76,6 +89,11 @@ Spacer.focusedSpace = nil
 --- Variable
 --- hs.chooser object representing the Space chooser.
 Spacer.spaceChooser = nil
+
+--- Spacer.delayedWindowClickTimer
+--- Variable
+--- hs.timer used in fullscreenWindowToLeft to perform a delayed left click.
+Spacer.delayedWindowClickTimer = nil
 
 -- Set the menu text of the Spacer menu bar item.
 function Spacer:_setMenuText()
@@ -420,6 +438,76 @@ function Spacer:_showSpaceChooser()
     end
 end
 
+function Spacer:fullscreenWindowToLeft()
+    self.delayedWindowClickTimer = hs.timer.delayed.new(1,
+                                                        self:_instanceCallback(
+                                                            self._clickOnLeftScreenSide))
+
+    app = hs.application.frontmostApplication()
+
+    if app == nil then
+        self.logger.w("No frontmost application, can't fullscreen")
+        return
+    end
+
+    if not self:_trySelectingTilingMenuItem(app) then
+        self:_tileToTheLeft(app)
+    end
+
+    self.delayedWindowClickTimer:start()
+end
+
+function Spacer:_clickOnLeftScreenSide()
+    mousePosition = hs.mouse.getRelativePosition()
+    currentScreenFrame = hs.mouse.getCurrentScreen():frame()
+
+    clickPosition = {
+        x = currentScreenFrame.x + 10,
+        y = currentScreenFrame.y + 10
+    }
+
+    self.logger.vf("Clicking at position: %s", hs.inspect(clickPosition))
+
+    -- Click for 1ms
+    hs.eventtap.leftClick(clickPosition, 1000) -- hold for 1ms
+
+    -- Restore the original mouse position
+    self.logger.vf("Restoring mouse position to: %s", mousePosition)
+    hs.mouse.setRelativePosition(mousePosition)
+end
+
+function Spacer:_trySelectingTilingMenuItem(app)
+    self.logger.vf("Selecting menu item '%s' in section '%s'",
+                   self.tilingMenuItem, self.tiling)
+    selected = app:selectMenuItem({self.tilingMenuSection, self.tilingMenuItem})
+
+    if not selected then
+        self.logger.wf("Could not find menu item '%s' in section '%s'",
+                       self.tilingMenuItem, self.tilingMenuSection)
+    end
+
+    return selected
+end
+
+function Spacer:_tileToTheLeft(app)
+    window = app:focusedWindow()
+
+    if not window then
+        self.logger.w("No window found")
+        return false
+    end
+
+    windowAx = hs.axuielement.windowElement(window)
+    windowAx:setTimeout(0.01)
+    resizeButtonAx = windowAx:attributeValue("AXFullScreenButton")
+    resizeButtonAx:setTimeout(0.01)
+    resizeButtonAx:performAction("AXShowMenu")
+
+    hs.eventtap.keyStroke({}, "down", 1000)
+    hs.eventtap.keyStroke({}, "down", 1000)
+    hs.eventtap.keyStroke({}, "return", 1000)
+end
+
 --- Spacer:init()
 --- Method
 --- Spoon initializer method for Spacer.
@@ -504,7 +592,9 @@ end
 function Spacer:bindHotkeys(mapping)
     -- Bind method for showing the space chooser to the desired hotkey.
     hs.spoons.bindHotkeysToSpec({
-        space_chooser = self:_instanceCallback(self._showSpaceChooser)
+        space_chooser = self:_instanceCallback(self._showSpaceChooser),
+        fullscreen_window_to_left = self:_instanceCallback(
+            self.fullscreenWindowToLeft)
     }, mapping)
 end
 
