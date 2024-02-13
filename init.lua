@@ -29,6 +29,11 @@ Spacer.license = "MIT - https://opensource.org/licenses/MIT"
 --- Key used for persisting space names between Hammerspoon launches via hs.settings.
 Spacer.settingsKey = "SpacerSpaceNames"
 
+--- Spacer.menuBarAutosaveName
+--- Constant
+--- Autosave name used with macOS to save menu bar item position.
+Spacer.menuBarAutosaveName = "SpacerMenuBar"
+
 --- Spacer.defaultHotkeys
 --- Variable
 --- Default hotkey to use for the space chooser and fullscreen 
@@ -631,6 +636,7 @@ function Spacer:start()
 
     self.logger.v("Creating menubar item")
     self.menuBar = hs.menubar.new()
+    self.menuBar:autosaveName(self.menuBarAutosaveName)
     self.menuBar:setMenu(self:_instanceCallback(self._menuHandler))
 
     -- Set space watcher to call handler on space change.
