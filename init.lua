@@ -19,7 +19,7 @@ Spacer.__index = Spacer
 
 -- Metadata
 Spacer.name = "Spacer"
-Spacer.version = "1.0.2"
+Spacer.version = "1.0.3"
 Spacer.author = "Adam Miller <adam@adammiller.io>"
 Spacer.homepage = "https://github.com/adammillerio/Spacer.spoon"
 Spacer.license = "MIT - https://opensource.org/licenses/MIT"
