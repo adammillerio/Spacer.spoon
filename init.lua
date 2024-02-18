@@ -40,7 +40,8 @@ Spacer.menuBarAutosaveName = "SpacerMenuBar"
 --- when "hotkeys" = "default".
 Spacer.defaultHotkeys = {
     space_chooser = {{"ctrl"}, "space"},
-    toggle_fullscreen_window_to_left = {{"cmd", "shift"}, "f"}
+    toggle_fullscreen_window_to_left = {{"cmd", "shift"}, "f"},
+    undo_space = {{"cmd", "ctrl"}, "z"}
 }
 
 --- Spacer.tilingMenuSection
@@ -111,6 +112,11 @@ Spacer.spaceChooser = nil
 --- Variable
 --- hs.timer used in fullscreenWindowToLeft to perform a delayed left click.
 Spacer.delayedWindowClickTimer = nil
+
+--- Spacer.previousSpace
+--- Variable
+--- The previously focused space. Used for the undo_space hotkey.
+Spacer.previousSpace = nil
 
 -- Set the menu text of the Spacer menu bar item.
 function Spacer:_setMenuText()
@@ -191,6 +197,9 @@ end
 -- although in my testing this has always been -1 and the docs say that it was
 -- not something to be relied on.
 function Spacer:_spaceChanged(spaceID)
+    -- Store the previous space for undo.
+    self.previousSpace = self.focusedSpace
+
     -- Store the focused space ID.
     self.focusedSpace = hs.spaces.focusedSpace()
 
@@ -597,6 +606,24 @@ function Spacer:_tileToTheLeft(app)
     hs.eventtap.keyStroke({}, "return", 1000)
 end
 
+--- Spacer:undoSpace()
+--- Method
+--- Return to the previously focused space.
+---
+--- Returns:
+---  * None
+---
+--- Parameters:
+---  * None
+function Spacer:undoSpace()
+    if self.previousSpace then
+        self.logger.vf("Returning to previous space: %s", self.previousSpace)
+        hs.spaces.gotoSpace(self.previousSpace)
+    else
+        self.logger.w("No previous space, cannot undo")
+    end
+end
+
 --- Spacer:init()
 --- Method
 --- Spoon initializer method for Spacer.
@@ -684,7 +711,8 @@ function Spacer:bindHotkeys(mapping)
     hs.spoons.bindHotkeysToSpec({
         space_chooser = self:_instanceCallback(self._showSpaceChooser),
         toggle_fullscreen_window_to_left = self:_instanceCallback(
-            self.toggleFullscreenWindowToLeft)
+            self.toggleFullscreenWindowToLeft),
+        undo_space = self:_instanceCallback(self.undoSpace)
     }, mapping)
 end
 

@@ -19,6 +19,10 @@ Additionally, a hotkey can be bound (`space_chooser`) which will toggle a Spotli
 
 There is another hotkey that can be bound (`toggle_fullscreen_window_to_left`) which will toggle the fullscreen state of the current application in a space to the left of the current space, overriding the default macOS behavior of placing it at the end of all spaces (default: Cmd+Shift+F).
 
+## Undo Space
+
+The hotkey (`undo_space`) will return you to the space previously focused before the current one. (default: Cmd+Ctrl+Z)
+
 # Features
 
 * Spaces are enumerated by their position in Mission Control from left-to-right
@@ -74,6 +78,11 @@ spoon.Spacer:bindHotkeys({space_chooser = {{"ctrl"}, "space"}})
 Optionally, the fullscreen window to left toggle can be bound to a hotkey, such as Cmd+Shift+F:
 ```lua
 spoon.Spacer:bindHotkeys({toggle_fullscreen_window_to_left = {{"cmd", "shift"}, "f"}})
+```
+
+Optionally, the undo space function can be bound to a hotkey, such as Cmd+Ctrl+Z:
+```lua
+spoon.Spacer:bindHotkeys({undo_space = {{"cmd", "ctrl"}, "z"}})
 ```
 
 # Usage
